@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TacketSmart AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #e5e7eb;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: #111827;
+            color: white;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #6366f1;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .extra-field {
+            display: none;
+        }
+
+        .generate-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .generate-btn:hover {
+            background: #4338ca;
+        }
+
+        .generate-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+        }
+
+        .result-box {
+            background: #f8fafc;
+            border-left: 5px solid #4f46e5;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            line-height: 1.7;
+        }
+
+        .success {
+            color: #15803d;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .error {
+            color: #dc2626;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 15px auto;
+                padding: 12px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>💰 TacketSmart AI</h1>
+        <p>Smart Budget Planning with AI</p>
+    </header>
+
+    <main class="container">
+
+        <div class="card">
+
+            <h2>Choose Budget Type</h2>
+
+            <div class="tabs">
+                <button class="tab active" onclick="selectType('home')">
+                    🏠 Home
+                </button>
+
+                <button class="tab" onclick="selectType('party')">
+                    🎉 Party
+                </button>
+
+                <button class="tab" onclick="selectType('jewelry')">
+                    💎 Jewelry
+                </button>
+            </div>
+
+            <label for="budget">Budget Amount (₹)</label>
+
+            <input
+                type="number"
+                id="budget"
+                placeholder="Example: 10000"
+                min="1"
+            >
+
+            <label for="category">Category</label>
+
+            <input
+                type="text"
+                id="category"
+                value="Home"
+                placeholder="Example: Home"
+            >
+
+            <div id="guestsField" class="extra-field">
+
+                <label for="guests">Number of Guests</label>
+
+                <input
+                    type="number"
+                    id="guests"
+                    value="10"
+                    min="1"
+                >
+
+            </div>
+
+            <div id="jewelryField" class="extra-field">
+
+                <label for="itemType">Jewelry Item</label>
+
+                <select id="itemType">
+                    <option value="General">General</option>
+                    <option value="Ring">Ring</option>
+                    <option value="Chain">Chain</option>
+                    <option value="Bracelet">Bracelet</option>
+                    <option value="Earrings">Earrings</option>
+                    <option value="Necklace">Necklace</option>
+                </select>
+
+            </div>
+
+            <label for="description">Description</label>
+
+            <textarea
+                id="description"
+                placeholder="Describe what you want to plan..."
+            ></textarea>
+
+            <button
+                class="generate-btn"
+                id="generateBtn"
+                onclick="generateRecommendation()"
+            >
+                🤖 Generate AI Recommendation
+            </button>
+
+        </div>
+
+        <div class="card result" id="resultCard">
+
+            <h2>🤖 AI Recommendation</h2>
+
+            <div id="resultMessage"></div>
+
+            <div class="result-box" id="resultText"></div>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 TacketSmart AI</p>
+    </footer>
+
+
+    <script>
+
+        let selectedType = "home";
+
+
+        function selectType(type) {
+
+            selectedType = type;
+
+            const tabs = document.querySelectorAll(".tab");
+
+            tabs.forEach(tab => {
+                tab.classList.remove("active");
+            });
+
+            if (type === "home") {
+                tabs[0].classList.add("active");
+            }
+
+            if (type === "party") {
+                tabs[1].classList.add("active");
+            }
+
+            if (type === "jewelry") {
+                tabs[2].classList.add("active");
+            }
+
+
+            document.getElementById("guestsField").style.display =
+                type === "party" ? "block" : "none";
+
+
+            document.getElementById("jewelryField").style.display =
+                type === "jewelry" ? "block" : "none";
+
+
+            const category = document.getElementById("category");
+
+
+            if (type === "home") {
+                category.value = "Home";
+            }
+
+            if (type === "party") {
+                category.value = "Party";
+            }
+
+            if (type === "jewelry") {
+                category.value = "Jewelry";
+            }
+        }
+
+
+        async function generateRecommendation() {
+
+            const budget = Number(
+                document.getElementById("budget").value
+            );
+
+            const category =
+                document.getElementById("category").value;
+
+            const description =
+                document.getElementById("description").value;
+
+            const button =
+                document.getElementById("generateBtn");
+
+            const resultCard =
+                document.getElementById("resultCard");
+
+            const resultMessage =
+                document.getElementById("resultMessage");
+
+            const resultText =
+                document.getElementById("resultText");
+
+
+            if (!budget || budget <= 0) {
+
+                alert("Please enter a valid budget amount.");
+
+                return;
+            }
+
+
+            button.disabled = true;
+
+            button.innerText = "⏳ Generating...";
+
+
+            resultCard.style.display = "block";
+
+            resultMessage.innerHTML =
+                '<div class="success">AI is preparing your budget recommendation...</div>';
+
+            resultText.innerText = "";
+
+
+            let endpoint = "/api/home";
+
+            let requestData = {
+                budget: budget,
+                category: category,
+                description: description
+            };
+
+
+            if (selectedType === "party") {
+
+                endpoint = "/api/party";
+
+                requestData.guests =
+                    Number(
+                        document.getElementById("guests").value
+                    );
+            }
+
+
+            if (selectedType === "jewelry") {
+
+                endpoint = "/api/jewelry";
+
+                requestData.item_type =
+                    document.getElementById("itemType").value;
+            }
+
+
+            try {
+
+                const response = await fetch(endpoint, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(requestData)
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.detail
+                            ? JSON.stringify(data.detail)
+                            : "Request failed"
+                    );
+                }
+
+
+                if (
+                    data.ai_recommendation &&
+                    data.ai_recommendation.success
+                ) {
+
+                    resultMessage.innerHTML =
+                        '<div class="success">✅ AI recommendation generated successfully!</div>';
+
+
+                    resultText.innerText =
+                        data.ai_recommendation.recommendation;
+
+                } else {
+
+                    resultMessage.innerHTML =
+                        '<div class="error">❌ AI recommendation could not be generated.</div>';
+
+                    resultText.innerText =
+                        data.ai_recommendation?.error ||
+                        "Unknown error.";
+
+                }
+
+
+            } catch (error) {
+
+                resultMessage.innerHTML =
+                    '<div class="error">❌ Something went wrong.</div>';
+
+                resultText.innerText =
+                    error.message;
+
+            }
+
+
+            button.disabled = false;
+
+            button.innerText =
+                "🤖 Generate AI Recommendation";
+        }
+
+    </script>
+
+</body>
+</html>

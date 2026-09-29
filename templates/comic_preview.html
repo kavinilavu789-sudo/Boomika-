@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ comic.title }} - ComicCraft
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+<body>
+
+<main class="container">
+
+    <header class="result-header">
+
+        <div>
+
+            <div class="badge">
+                Generated Comic
+            </div>
+
+            <h1>
+                {{ comic.title }}
+            </h1>
+
+            <p>
+                {{ comic.panels|length }}
+                panels - Story, dialogue
+                and illustrations
+            </p>
+
+        </div>
+
+
+        <a
+            class="secondary"
+            href="/"
+        >
+            Create another
+        </a>
+
+    </header>
+
+
+    <section class="comic-grid">
+
+        {% for panel in comic.panels %}
+
+        <article class="panel">
+
+            <div class="panel-number">
+
+                PANEL {{ panel.panel_number }}
+
+            </div>
+
+
+            <h2>
+                {{ panel.title }}
+            </h2>
+
+
+            {% if panel.image_url %}
+
+            <img
+                src="{{ panel.image_url }}"
+                alt="Comic panel {{ panel.panel_number }}"
+            >
+
+            {% endif %}
+
+
+            <p class="scene">
+
+                {{ panel.scene }}
+
+            </p>
+
+
+            {% if panel.narration %}
+
+            <div class="narration">
+
+                <strong>
+                    Narration:
+                </strong>
+
+                {{ panel.narration }}
+
+            </div>
+
+            {% endif %}
+
+
+            {% if panel.dialogue %}
+
+            <div class="dialogue">
+
+                {% for line in panel.dialogue %}
+
+                <div>
+                    💬 {{ line }}
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+        </article>
+
+        {% endfor %}
+
+    </section>
+
+
+    <section class="export-box">
+
+        <h2>
+            Your comic is ready
+        </h2>
+
+        <p>
+            Download the complete story
+            as a PDF.
+        </p>
+
+        <a
+            class="primary"
+            href="{{ comic.pdf_url }}"
+        >
+            📄 Download PDF
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>
